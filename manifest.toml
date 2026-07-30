@@ -1,0 +1,52 @@
+[plugin]
+slug        = "emutos"
+name        = "EmuTOS (Atari ST)"
+version     = "0.1.0"
+rpp_version = "1"
+license     = "MIT"
+
+[capabilities]
+firmware = "emutos.firmware:Firmware"
+
+# Three hosts, and the third is a wildcard for a reason that was measured
+# rather than assumed (2026-07-30, repeated `curl -sSL -w %{url_effective}`
+# against one URL):
+#
+#   sourceforge.net
+#       where the download starts; `/projects/emutos/files/.../download`
+#       answers 302.
+#
+#   downloads.sourceforge.net
+#       the second hop, and the one that picks a mirror.
+#
+#   *.dl.sourceforge.net
+#       where it ends, and why a fixed list cannot work. SourceForge
+#       selects a mirror per request: `cfhcable`, `pilotfiber` and
+#       `gigenet` have all been observed as the final host for identical
+#       URLs. There is no enumerable set to write down.
+#
+#       It is also as narrow as it can be. `netpolicy.url_allowed` treats
+#       a `*.` prefix as one or more leading labels and never the bare
+#       domain, so this grants `<mirror>.dl.sourceforge.net` and grants
+#       neither `sourceforge.net` nor `dl.sourceforge.net.example.com`.
+#       `archive-org` declares `*.archive.org` on the same basis.
+#
+# Nothing here is an API. This plugin issues no request at all to list its
+# catalogue, and the host makes exactly one GET per install.
+[permissions]
+network  = [
+    "sourceforge.net",
+    "downloads.sourceforge.net",
+    "*.dl.sourceforge.net",
+]
+romm_api = []
+
+[config]
+# Which language build to install. EmuTOS ships 19 of each ROM size:
+# ca, cz, de, es, fi, fr, gr, hu, it, nl, no, pl, ro, ru, se, sg, tr,
+# uk, us.
+#
+# The value becomes part of a **member name inside the archive**, so it is
+# checked against the table in `emutos/catalogue.py` before it is used and
+# is never interpolated raw.
+language = { type = "str", default = "us" }
