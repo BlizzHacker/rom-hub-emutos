@@ -1,8 +1,5 @@
 # EmuTOS plugin for ROM Hub
 
-A project of the [Move Weight Foundation](https://foundation.moveweight.com), an
-Oklahoma non-profit corporation with 501(c)(3) status pending.
-
 Implements the RPP v1 `firmware` capability: **EmuTOS**, a free operating
 system for Atari ST computers, downloaded into the Hub's configured
 firmware directory and — where the library server can hold firmware —
